@@ -1,32 +1,21 @@
-# Compiler
 CXX = g++
-
-# Compiler flags
 CXXFLAGS = -Wall -Wextra -std=c++11
-
-# Source files
 SRCS = main.cpp request.cpp webserver.cpp loadbalancer.cpp
-
-# Object files
 OBJS = $(SRCS:.cpp=.o)
+EXEC = main
 
-# Executable name
-EXEC = load_balancer
+all: clean_log $(EXEC)
 
-# Default target
-all: $(EXEC)
+clean_log:
+	rm -f log.txt
 
-# Linking the object files to create the executable
 $(EXEC): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-# Compiling the source files into object files
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Clean up the build files
 clean:
 	rm -f $(OBJS) $(EXEC)
 
-# Phony targets
-.PHONY: all clean
+.PHONY: all clean clean_log

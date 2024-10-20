@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 #include <ctime>
 #include "loadbalancer.h"
@@ -18,17 +19,20 @@ int main(int argc, char* argv[]) {
     LoadBalancer proccessing_lb(num_servers);
     LoadBalancer streaming_lb(num_servers);
 
+    proccessing_lb.log_status();
+    proccessing_lb.log_status();
+
     // Initialize and generate a full queue for each loadbalancer
-    for (int i = 0; i < num_servers * 2; ++i) {
+    for (int i = 0; i < num_servers * 2 * 100; ++i) {
         Request* request = new Request();
         if (request->job_type == Request::JobType::Processing) {
             proccessing_lb.accept_request(request);
         } else if (request->job_type == Request::JobType::Streaming) {
-            proccessing_lb.accept_request(request);
+            streaming_lb.accept_request(request);
         }
     }
 
-    int traffic = num_servers * 0.2;  // adjustable flag controlling number of new requests
+    int traffic = num_servers * 0.1;  // adjustable flag controlling number of new requests
     for (int time = 1; time <= runtime; ++time) {
         proccessing_lb.update_time(time);
         streaming_lb.update_time(time);
@@ -40,9 +44,15 @@ int main(int argc, char* argv[]) {
             if (request->job_type == Request::JobType::Processing) {
                 proccessing_lb.accept_request(request);
             } else if (request->job_type == Request::JobType::Streaming) {
-                proccessing_lb.accept_request(request);
+                streaming_lb.accept_request(request);
             }
         }
+
+        proccessing_lb.process_requests();
+        streaming_lb.process_requests();
+
+        proccessing_lb.log_status();
+        proccessing_lb.log_status();
     }
 
     return 0;

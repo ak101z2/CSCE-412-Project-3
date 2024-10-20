@@ -13,12 +13,13 @@ class LoadBalancer {
     int time;
 
     public:
-    static const int SCALE_FACTOR = 5;  // defines the acceptable difference between num_reqests, num_servers before autoscaling
+    static const int SCALE_FACTOR = 2;  // defines the acceptable difference between num_reqests, num_servers before autoscaling
     LoadBalancer(int _num_servers);
     void accept_request(Request* request);
     void process_requests();
     void update_time(int _time);
     void autoscale();
+    void log_status();
 };
 
 #endif
