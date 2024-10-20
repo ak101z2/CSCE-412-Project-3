@@ -1,5 +1,8 @@
-make
+**make**
 
-./main <num servers> <total runtime>
 
-make clean
+**./main <num servers> <total runtime>
+**
+
+**make clean
+**
